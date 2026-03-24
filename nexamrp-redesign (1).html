@@ -1,0 +1,1856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NexaMRP — Manufacturing Intelligence Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f4f0;
+  --bg2: #eceae4;
+  --surface: #ffffff;
+  --surface2: #fafaf8;
+  --surface3: #f0efe9;
+  --border: rgba(0,0,0,0.07);
+  --border2: rgba(0,0,0,0.12);
+  --text: #111110;
+  --text2: #6b6a66;
+  --text3: #a5a39d;
+  --accent: #1a56db;
+  --accent-soft: #e8effe;
+  --accent2: #0891b2;
+  --green: #16a34a;
+  --green-soft: #dcfce7;
+  --orange: #d97706;
+  --orange-soft: #fef3c7;
+  --red: #dc2626;
+  --red-soft: #fee2e2;
+  --purple: #7c3aed;
+  --purple-soft: #ede9fe;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow: 0 4px 16px rgba(0,0,0,0.06), 0 2px 6px rgba(0,0,0,0.04);
+  --shadow-lg: 0 16px 48px rgba(0,0,0,0.1), 0 4px 16px rgba(0,0,0,0.06);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --radius-xs: 6px;
+  --sidebar-w: 248px;
+  --transition: all 0.22s cubic-bezier(0.4,0,0.2,1);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── KEYFRAMES ── */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(20px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity:0; }
+  to   { opacity:1; }
+}
+@keyframes scaleIn {
+  from { opacity:0; transform:scale(0.96); }
+  to   { opacity:1; transform:scale(1); }
+}
+@keyframes slideRight {
+  from { transform:translateX(-100%); }
+  to   { transform:translateX(0); }
+}
+@keyframes pulse-dot {
+  0%,100% { box-shadow:0 0 0 0 rgba(22,163,74,0.4); }
+  50%     { box-shadow:0 0 0 6px rgba(22,163,74,0); }
+}
+@keyframes shimmer {
+  0%   { background-position:-200% 0; }
+  100% { background-position:200% 0; }
+}
+@keyframes countUp {
+  from { opacity:0; transform:translateY(8px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes progress-anim {
+  from { width:0; }
+}
+@keyframes spin {
+  to { transform:rotate(360deg); }
+}
+@keyframes barGrow {
+  from { height:0; }
+}
+
+/* ── LOGIN PAGE ── */
+#page-login {
+  background: linear-gradient(135deg, #0d1b3e 0%, #0c3660 40%, #0a2540 100%);
+  display:flex; align-items:center; justify-content:center;
+  min-height:100vh;
+  position:relative;
+  overflow:hidden;
+}
+
+#page-login::before {
+  content:'';
+  position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse 600px 400px at 20% 50%, rgba(26,86,219,0.15) 0%, transparent 70%),
+    radial-gradient(ellipse 400px 300px at 80% 20%, rgba(8,145,178,0.1) 0%, transparent 70%);
+}
+
+.login-grid {
+  display:grid;
+  grid-template-columns:1fr 420px;
+  max-width:960px;
+  width:100%;
+  margin:0 auto;
+  padding:40px;
+  gap:80px;
+  align-items:center;
+  position:relative;
+  z-index:1;
+}
+
+.login-left { animation: fadeUp 0.7s ease both; }
+
+.login-eyebrow {
+  display:inline-flex; align-items:center; gap:8px;
+  background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12);
+  padding:6px 14px; border-radius:100px;
+  font-size:11.5px; font-weight:500; color:rgba(255,255,255,0.6);
+  letter-spacing:0.4px; margin-bottom:24px;
+}
+
+.login-eyebrow span { width:6px; height:6px; border-radius:50%; background:#34d399; animation:pulse-dot 2s infinite; }
+
+.login-headline {
+  font-size:52px; font-weight:800; line-height:1.05;
+  color:#fff; letter-spacing:-2px; margin-bottom:16px;
+}
+
+.login-headline em { font-style:normal; color:#60a5fa; }
+
+.login-desc {
+  font-size:15px; font-weight:300; color:rgba(255,255,255,0.45);
+  line-height:1.7; max-width:380px;
+}
+
+.login-stats {
+  display:flex; gap:32px; margin-top:40px;
+}
+
+.login-stat-n { font-size:28px; font-weight:700; color:#fff; }
+.login-stat-l { font-size:12px; color:rgba(255,255,255,0.4); font-weight:400; }
+
+.login-box {
+  background:#fff;
+  border-radius:24px;
+  padding:44px 40px;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.3);
+  animation: scaleIn 0.6s ease 0.2s both;
+}
+
+.login-logo {
+  font-size:22px; font-weight:800;
+  color:var(--text); letter-spacing:-0.8px;
+  margin-bottom:4px;
+}
+.login-logo span { color:var(--accent); }
+
+.login-subtitle { font-size:13px; color:var(--text3); font-weight:400; margin-bottom:32px; }
+
+.login-form { display:flex; flex-direction:column; gap:14px; }
+
+.form-group { display:flex; flex-direction:column; gap:6px; }
+.form-label { font-size:12px; font-weight:600; color:var(--text2); letter-spacing:0.2px; }
+
+.input-wrap { position:relative; }
+.input-wrap .i-icon { position:absolute; left:14px; top:50%; transform:translateY(-50%); font-size:15px; pointer-events:none; }
+
+.input {
+  width:100%;
+  padding:11px 14px 11px 42px;
+  border:1.5px solid var(--border2);
+  border-radius:var(--radius-sm);
+  font-family:'Outfit',sans-serif; font-size:14px; font-weight:400;
+  color:var(--text); background:#fff;
+  outline:none; transition:var(--transition);
+}
+.input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(26,86,219,0.08); }
+.input::placeholder { color:var(--text3); }
+.input.no-icon { padding-left:14px; }
+
+.remember-row { display:flex; align-items:center; justify-content:space-between; }
+.check-label { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text2); cursor:pointer; font-weight:400; }
+.custom-check {
+  width:16px; height:16px; border-radius:4px;
+  background:var(--accent); border:1.5px solid var(--accent);
+  display:flex; align-items:center; justify-content:center;
+  font-size:9px; color:#fff; flex-shrink:0;
+}
+.forgot-link { font-size:12.5px; color:var(--accent); font-weight:500; text-decoration:none; }
+.forgot-link:hover { text-decoration:underline; }
+
+.btn {
+  display:inline-flex; align-items:center; justify-content:center; gap:7px;
+  padding:11px 20px; border-radius:var(--radius-sm);
+  font-family:'Outfit',sans-serif; font-size:14px; font-weight:600;
+  cursor:pointer; border:none; transition:var(--transition); text-decoration:none;
+  letter-spacing:-0.1px;
+}
+.btn-primary { background:var(--accent); color:#fff; }
+.btn-primary:hover { background:#1648c0; transform:translateY(-1px); box-shadow:0 6px 20px rgba(26,86,219,0.3); }
+.btn-success { background:var(--green); color:#fff; }
+.btn-success:hover { background:#15803d; transform:translateY(-1px); }
+.btn-ghost { background:var(--surface3); color:var(--text2); border:1px solid var(--border2); }
+.btn-ghost:hover { background:var(--bg2); color:var(--text); }
+.btn-danger { background:var(--red-soft); color:var(--red); border:1px solid rgba(220,38,38,0.15); }
+.btn-danger:hover { background:var(--red); color:#fff; }
+
+.divider-text {
+  display:flex; align-items:center; gap:12px;
+  font-size:12px; color:var(--text3); font-weight:400;
+}
+.divider-text::before, .divider-text::after { content:''; flex:1; height:1px; background:var(--border2); }
+
+.social-row { display:flex; gap:10px; }
+.social-btn {
+  flex:1; display:flex; align-items:center; justify-content:center; gap:8px;
+  padding:10px; border:1.5px solid var(--border2); border-radius:var(--radius-sm);
+  font-family:'Outfit',sans-serif; font-size:12.5px; font-weight:500; color:var(--text2);
+  cursor:pointer; background:#fff; transition:var(--transition);
+}
+.social-btn:hover { border-color:var(--accent); color:var(--accent); transform:translateY(-1px); }
+
+.login-footer { text-align:center; font-size:11px; color:var(--text3); margin-top:20px; }
+
+/* ── APP SHELL ── */
+.app-shell { display:flex; min-height:100vh; }
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width:var(--sidebar-w);
+  min-height:100vh;
+  background:var(--text);
+  display:flex; flex-direction:column;
+  position:fixed; left:0; top:0;
+  z-index:100;
+  border-right:1px solid rgba(255,255,255,0.04);
+}
+
+.sidebar-logo {
+  padding:26px 22px 22px;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+  display:flex; align-items:center; gap:10px;
+}
+
+.logo-icon {
+  width:34px; height:34px; border-radius:10px;
+  background:linear-gradient(135deg, var(--accent), var(--accent2));
+  display:flex; align-items:center; justify-content:center;
+  font-size:14px; color:#fff; font-weight:800; flex-shrink:0;
+}
+
+.logo-text { font-size:19px; font-weight:800; color:#fff; letter-spacing:-0.7px; }
+.logo-text span { color:#60a5fa; }
+
+.sidebar-nav { flex:1; padding:14px 12px; overflow-y:auto; }
+
+.nav-section {
+  font-size:10px; font-weight:700; color:rgba(255,255,255,0.22);
+  text-transform:uppercase; letter-spacing:1.4px;
+  padding:18px 10px 8px;
+}
+
+.nav-item {
+  display:flex; align-items:center; gap:11px;
+  padding:10px 12px; border-radius:10px;
+  cursor:pointer; color:rgba(255,255,255,0.5);
+  font-size:13.5px; font-weight:500;
+  transition:var(--transition); margin-bottom:1px;
+  position:relative; overflow:hidden;
+}
+
+.nav-item::before {
+  content:''; position:absolute; inset:0; border-radius:10px;
+  background:rgba(255,255,255,0); transition:var(--transition);
+}
+
+.nav-item:hover { color:rgba(255,255,255,0.88); }
+.nav-item:hover::before { background:rgba(255,255,255,0.05); }
+
+.nav-item.active { color:#fff; background:rgba(26,86,219,0.85); }
+.nav-item.active::before { display:none; }
+
+.nav-icon { font-size:15px; flex-shrink:0; width:18px; text-align:center; }
+
+.nav-badge {
+  margin-left:auto; background:rgba(220,38,38,0.8); color:#fff;
+  font-size:10px; font-weight:700; padding:2px 7px; border-radius:100px;
+}
+
+.sidebar-footer {
+  padding:16px 20px;
+  border-top:1px solid rgba(255,255,255,0.06);
+  display:flex; align-items:center; gap:10px;
+}
+
+.user-avatar {
+  width:34px; height:34px; border-radius:10px;
+  background:linear-gradient(135deg, var(--accent), #60a5fa);
+  display:flex; align-items:center; justify-content:center;
+  color:#fff; font-size:12px; font-weight:700; flex-shrink:0;
+}
+
+.user-name { font-size:13px; font-weight:600; color:#fff; }
+.user-role { font-size:11px; color:rgba(255,255,255,0.35); font-weight:400; }
+
+/* ── MAIN ── */
+.main { margin-left:var(--sidebar-w); flex:1; }
+.page { display:none; min-height:100vh; }
+.page.active { display:block; }
+
+/* ── TOPBAR ── */
+.topbar {
+  height:64px; background:var(--surface);
+  border-bottom:1px solid var(--border2);
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 32px;
+  position:sticky; top:0; z-index:50;
+}
+
+.topbar-left { display:flex; align-items:center; gap:16px; }
+
+.topbar-title {
+  font-size:18px; font-weight:700; color:var(--text); letter-spacing:-0.4px;
+}
+
+.breadcrumb {
+  font-size:12px; color:var(--text3); font-weight:400;
+  display:flex; align-items:center; gap:6px;
+}
+
+.topbar-actions { display:flex; align-items:center; gap:8px; }
+
+.topbar-notif {
+  width:38px; height:38px; border-radius:10px;
+  background:var(--surface3); border:1px solid var(--border2);
+  display:flex; align-items:center; justify-content:center;
+  font-size:16px; cursor:pointer; position:relative; transition:var(--transition);
+}
+.topbar-notif:hover { background:var(--bg2); }
+.notif-dot {
+  width:8px; height:8px; border-radius:50%; background:var(--red);
+  position:absolute; top:7px; right:7px;
+  border:2px solid var(--surface);
+}
+
+/* ── PAGE CONTENT ── */
+.page-content { padding:28px 32px; animation:fadeUp 0.4s ease; }
+
+/* ── CARDS ── */
+.card {
+  background:var(--surface);
+  border-radius:var(--radius);
+  border:1px solid var(--border2);
+  box-shadow:var(--shadow-sm);
+  overflow:hidden;
+  transition:var(--transition);
+}
+.card:hover { box-shadow:var(--shadow); }
+
+.card-header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:18px 22px 14px;
+  border-bottom:1px solid var(--border);
+}
+
+.card-title {
+  font-size:15px; font-weight:700; color:var(--text);
+  letter-spacing:-0.3px; display:flex; align-items:center; gap:10px;
+}
+
+.card-title-dot {
+  width:8px; height:8px; border-radius:50%;
+  background:linear-gradient(135deg, var(--accent), var(--accent2));
+  flex-shrink:0;
+}
+
+/* ── GRID ── */
+.grid { display:grid; gap:20px; }
+.grid-3 { grid-template-columns:repeat(3,1fr); }
+.grid-2 { grid-template-columns:repeat(2,1fr); }
+.grid-1-2 { grid-template-columns:1fr 2fr; }
+.grid-2-1 { grid-template-columns:2fr 1fr; }
+.grid-4 { grid-template-columns:repeat(4,1fr); }
+
+/* ── METRIC CARDS ── */
+.metric-card {
+  background:var(--surface);
+  border-radius:var(--radius);
+  border:1px solid var(--border2);
+  padding:22px;
+  display:flex; flex-direction:column; gap:12px;
+  transition:var(--transition); position:relative; overflow:hidden;
+  cursor:default;
+}
+
+.metric-card::after {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg, var(--accent), var(--accent2));
+  transform:scaleX(0); transform-origin:left;
+  transition:transform 0.3s ease;
+}
+.metric-card:hover { transform:translateY(-2px); box-shadow:var(--shadow); }
+.metric-card:hover::after { transform:scaleX(1); }
+
+.metric-icon {
+  width:44px; height:44px; border-radius:12px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:20px;
+}
+
+.metric-label {
+  font-size:11px; font-weight:600; color:var(--text3);
+  text-transform:uppercase; letter-spacing:0.8px;
+}
+
+.metric-value {
+  font-size:38px; font-weight:800; color:var(--text);
+  letter-spacing:-1.5px; line-height:1;
+  animation: countUp 0.5s ease;
+}
+
+.metric-value sup { font-size:18px; letter-spacing:-0.5px; }
+
+.metric-footer {
+  display:flex; align-items:center; gap:8px;
+  font-size:12px; color:var(--text3);
+}
+
+/* ── BADGES ── */
+.badge {
+  display:inline-flex; align-items:center; gap:4px;
+  padding:3px 9px; border-radius:100px;
+  font-size:11px; font-weight:600; white-space:nowrap;
+  letter-spacing:0.1px;
+}
+.badge-green  { background:var(--green-soft);  color:var(--green); }
+.badge-orange { background:var(--orange-soft); color:var(--orange); }
+.badge-red    { background:var(--red-soft);    color:var(--red); }
+.badge-blue   { background:var(--accent-soft); color:var(--accent); }
+.badge-purple { background:var(--purple-soft); color:var(--purple); }
+.badge-gray   { background:var(--surface3);    color:var(--text2); border:1px solid var(--border2); }
+
+/* ── PROGRESS ── */
+.progress-track {
+  height:5px; background:var(--bg2); border-radius:100px; overflow:hidden;
+}
+.progress-fill {
+  height:100%; border-radius:100px;
+  animation:progress-anim 1.2s cubic-bezier(0.4,0,0.2,1) both;
+  animation-delay:0.3s;
+}
+
+/* ── PIPELINE ── */
+.pipeline-wrap { display:flex; align-items:center; padding:20px 0 4px; }
+
+.pipeline-step {
+  display:flex; flex-direction:column; align-items:center; flex:1;
+  position:relative;
+}
+
+.pipeline-step:not(:last-child)::after {
+  content:''; position:absolute; top:14px; left:calc(50% + 15px);
+  right:calc(-50% + 15px); height:1.5px; background:var(--border2);
+}
+.pipeline-step.done:not(:last-child)::after { background:var(--green); }
+.pipeline-step.active:not(:last-child)::after { background:linear-gradient(90deg,var(--accent),var(--border2)); }
+
+.ps-dot {
+  width:28px; height:28px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:10px; font-weight:700; z-index:1; margin-bottom:8px;
+  transition:var(--transition);
+}
+.ps-dot.done  { background:var(--green);  color:#fff; }
+.ps-dot.active { background:var(--accent); color:#fff; box-shadow:0 0 0 5px rgba(26,86,219,0.15); animation:pulse-dot 2s infinite; }
+.ps-dot.pending { background:var(--surface3); color:var(--text3); border:1.5px solid var(--border2); }
+.ps-dot.delayed { background:var(--orange); color:#fff; }
+
+.ps-label { font-size:10px; color:var(--text3); font-weight:500; text-align:center; max-width:64px; line-height:1.3; }
+.ps-time  { font-size:9.5px; color:var(--accent); font-weight:600; margin-top:2px; }
+
+/* ── TABLE ── */
+.table-wrap { overflow-x:auto; }
+table { width:100%; border-collapse:collapse; font-size:13.5px; }
+
+thead tr { background:var(--surface2); }
+th {
+  padding:11px 18px; text-align:left;
+  font-size:10.5px; font-weight:700; color:var(--text3);
+  text-transform:uppercase; letter-spacing:0.7px;
+  border-bottom:1px solid var(--border2);
+}
+
+td {
+  padding:13px 18px; border-bottom:1px solid var(--border);
+  color:var(--text2); font-weight:400; transition:background 0.15s;
+}
+
+tr:last-child td { border-bottom:none; }
+tr:hover td { background:var(--surface2); }
+
+.td-name { font-weight:600; color:var(--text) !important; display:flex; align-items:center; gap:10px; }
+
+/* ── STATUS DOT ── */
+.status-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+.dot-green  { background:var(--green); box-shadow:0 0 0 3px var(--green-soft); }
+.dot-orange { background:var(--orange); box-shadow:0 0 0 3px var(--orange-soft); }
+.dot-red    { background:var(--red); box-shadow:0 0 0 3px var(--red-soft); }
+.dot-blue   { background:var(--accent); box-shadow:0 0 0 3px var(--accent-soft); }
+
+/* ── ALERT ITEMS ── */
+.alert-item {
+  display:flex; align-items:flex-start; gap:12px;
+  padding:13px 16px; border-radius:var(--radius-sm);
+  margin-bottom:8px; transition:var(--transition);
+}
+.alert-item:last-child { margin-bottom:0; }
+.alert-item.warning { background:rgba(217,119,6,0.05); border-left:3px solid var(--orange); }
+.alert-item.danger  { background:rgba(220,38,38,0.05);  border-left:3px solid var(--red); }
+.alert-item.info    { background:rgba(26,86,219,0.05);   border-left:3px solid var(--accent); }
+.alert-item.success { background:rgba(22,163,74,0.05);   border-left:3px solid var(--green); }
+
+.alert-item:hover { transform:translateX(3px); }
+
+.alert-icon-box {
+  width:34px; height:34px; border-radius:9px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:16px; flex-shrink:0;
+}
+
+.alert-text strong { display:block; font-size:13px; font-weight:600; color:var(--text); margin-bottom:2px; }
+.alert-text span { font-size:12px; color:var(--text3); font-weight:400; line-height:1.4; }
+
+/* ── BAR CHART ── */
+.bar-chart-wrap {
+  display:flex; align-items:flex-end; gap:8px;
+  height:110px; padding:0 4px;
+}
+.bar-col {
+  flex:1; display:flex; flex-direction:column; align-items:center; gap:5px;
+  height:100%; justify-content:flex-end;
+}
+.bar {
+  width:100%; border-radius:5px 5px 0 0;
+  transition:height 0.6s cubic-bezier(0.4,0,0.2,1);
+  animation:barGrow 1s cubic-bezier(0.4,0,0.2,1) both;
+}
+.bar-label { font-size:9.5px; color:var(--text3); font-weight:500; }
+.bar-val   { font-size:9.5px; color:var(--text2); font-weight:600; }
+
+/* ── TOGGLE ── */
+.toggle {
+  width:42px; height:23px; background:var(--bg2); border-radius:100px;
+  position:relative; cursor:pointer; transition:background 0.2s; flex-shrink:0;
+  border:1.5px solid var(--border2);
+}
+.toggle.on { background:var(--accent); border-color:var(--accent); }
+.toggle::after {
+  content:''; width:17px; height:17px; background:#fff; border-radius:50%;
+  position:absolute; top:1px; left:1px;
+  transition:left 0.2s cubic-bezier(0.4,0,0.2,1);
+  box-shadow:0 1px 4px rgba(0,0,0,0.15);
+}
+.toggle.on::after { left:21px; }
+
+/* ── FORM ── */
+select {
+  padding:9px 13px; border:1.5px solid var(--border2); border-radius:var(--radius-sm);
+  font-family:'Outfit',sans-serif; font-size:13px; font-weight:400; color:var(--text2);
+  background:var(--surface); outline:none; cursor:pointer; transition:var(--transition);
+}
+select:focus { border-color:var(--accent); }
+
+.search-wrap { position:relative; }
+.search-wrap::before { content:'🔍'; position:absolute; left:12px; top:50%; transform:translateY(-50%); font-size:13px; z-index:1; }
+.search-wrap .input { padding-left:38px; }
+
+/* ── STOCK DOT ── */
+.stock-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+
+/* ── SETTINGS NAV ── */
+.settings-nav { display:flex; flex-direction:column; gap:2px; }
+.settings-nav-item {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 14px; border-radius:var(--radius-sm);
+  font-size:13px; font-weight:500; color:var(--text2);
+  cursor:pointer; transition:var(--transition);
+}
+.settings-nav-item:hover { background:var(--surface3); color:var(--text); }
+.settings-nav-item.active { background:var(--accent-soft); color:var(--accent); font-weight:600; }
+
+/* ── TABS ── */
+.tabs { display:flex; gap:2px; background:var(--surface3); border-radius:var(--radius-sm); padding:3px; width:fit-content; }
+.tab {
+  padding:7px 16px; border-radius:var(--radius-xs);
+  font-size:13px; font-weight:500; color:var(--text3);
+  cursor:pointer; transition:var(--transition); white-space:nowrap;
+}
+.tab.active { background:var(--surface); color:var(--text); font-weight:600; box-shadow:var(--shadow-sm); }
+
+/* ── NOTIF ROW ── */
+.notif-row {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:15px 0; border-bottom:1px solid var(--border);
+}
+.notif-row:last-child { border-bottom:none; }
+.notif-label { display:flex; align-items:center; gap:10px; font-size:14px; font-weight:500; color:var(--text); }
+.notif-sub { font-size:12px; color:var(--text3); font-weight:400; margin-top:1px; }
+
+/* ── USER AVATAR ── */
+.user-avi {
+  width:30px; height:30px; border-radius:9px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:10px; font-weight:700; color:#fff; flex-shrink:0;
+}
+
+/* ── ONLINE STATUS ── */
+.online-dot {
+  width:7px; height:7px; border-radius:50%;
+  animation:pulse-dot 2s infinite;
+}
+
+/* ── SPARKLINE ── */
+.sparkline-row {
+  display:flex; align-items:center; gap:4px; height:30px;
+}
+.sparkline-bar {
+  flex:1; border-radius:2px; min-height:4px; transition:var(--transition);
+}
+
+/* ── PROGRESS RING ── */
+.ring-wrap { position:relative; width:80px; height:80px; flex-shrink:0; }
+.ring-wrap svg { transform:rotate(-90deg); }
+.ring-bg  { fill:none; stroke:var(--surface3); stroke-width:6; }
+.ring-val { fill:none; stroke-width:6; stroke-linecap:round; transition:stroke-dashoffset 1s ease; }
+.ring-text { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column; }
+.ring-num  { font-size:18px; font-weight:800; color:var(--text); letter-spacing:-0.8px; }
+.ring-lbl  { font-size:9px; color:var(--text3); font-weight:500; }
+
+/* ── SECTION HEADER ── */
+.section-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+.section-title { font-size:16px; font-weight:700; color:var(--text); letter-spacing:-0.3px; }
+
+/* LIVE badge */
+.live-badge {
+  display:inline-flex; align-items:center; gap:5px;
+  background:rgba(22,163,74,0.08); border:1px solid rgba(22,163,74,0.2);
+  color:var(--green); padding:3px 10px; border-radius:100px;
+  font-size:11px; font-weight:600;
+}
+.live-dot { width:6px; height:6px; border-radius:50%; background:var(--green); animation:pulse-dot 2s infinite; }
+
+/* ── MINI CHART (SVG Area) ── */
+.area-chart-wrap { padding:0 22px 22px; }
+
+/* ── CHART LEGEND ── */
+.chart-legend { display:flex; align-items:center; gap:16px; flex-wrap:wrap; padding:8px 0 0; }
+.legend-item { display:flex; align-items:center; gap:6px; font-size:12px; color:var(--text3); font-weight:500; }
+.legend-dot { width:8px; height:8px; border-radius:50%; }
+
+/* ── RESPONSIVE ── */
+@media (max-width:1200px) {
+  .grid-3 { grid-template-columns:1fr 1fr; }
+  .grid-4 { grid-template-columns:1fr 1fr; }
+}
+@media (max-width:900px) {
+  .login-grid { grid-template-columns:1fr; }
+  .login-left { display:none; }
+  .grid-2-1, .grid-1-2 { grid-template-columns:1fr; }
+}
+
+/* ── INVENTORY CARD VARIANT ── */
+.inv-row {
+  display:flex; align-items:center; gap:16px;
+  padding:14px 22px; border-bottom:1px solid var(--border);
+  transition:var(--transition);
+}
+.inv-row:last-child { border-bottom:none; }
+.inv-row:hover { background:var(--surface2); }
+
+/* ── TIMELINE ── */
+.tl-item { display:flex; gap:16px; padding:12px 0; position:relative; }
+.tl-item:not(:last-child)::before {
+  content:''; position:absolute; left:19px; top:38px; bottom:0; width:1.5px; background:var(--border2);
+}
+.tl-dot { width:38px; height:38px; border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+
+/* animations for page entry */
+.page.active .metric-card:nth-child(1) { animation-delay:0.05s; }
+.page.active .metric-card:nth-child(2) { animation-delay:0.1s; }
+.page.active .metric-card:nth-child(3) { animation-delay:0.15s; }
+.page.active .metric-card:nth-child(4) { animation-delay:0.2s; }
+.stagger { animation:fadeUp 0.5s ease both; }
+
+/* Number ticker */
+@keyframes ticker {
+  0%   { transform:translateY(0); }
+  100% { transform:translateY(-100%); }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ LOGIN ═══ -->
+<div id="page-login" class="page active">
+  <div class="login-grid">
+    <div class="login-left">
+      <div class="login-eyebrow"><span></span> Manufacturing Intelligence Platform</div>
+      <div class="login-headline">Run your<br>factory <em>smarter</em>.</div>
+      <div class="login-desc">Real-time production visibility, intelligent MRP planning, and predictive alerts — all in one unified platform built for modern manufacturers.</div>
+      <div class="login-stats">
+        <div>
+          <div class="login-stat-n">99.8%</div>
+          <div class="login-stat-l">Uptime SLA</div>
+        </div>
+        <div>
+          <div class="login-stat-n">14ms</div>
+          <div class="login-stat-l">Avg. response</div>
+        </div>
+        <div>
+          <div class="login-stat-n">4,200+</div>
+          <div class="login-stat-l">Active factories</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="login-box">
+      <div class="login-logo">Nexa<span>MRP</span></div>
+      <div class="login-subtitle">Sign in to your workspace</div>
+      <div class="login-form">
+        <div class="form-group">
+          <div class="form-label">Email address</div>
+          <div class="input-wrap">
+            <span class="i-icon">👤</span>
+            <input class="input" type="email" placeholder="name@company.com">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-label">Password</div>
+          <div class="input-wrap">
+            <span class="i-icon">🔒</span>
+            <input class="input" type="password" placeholder="Enter password">
+          </div>
+        </div>
+        <div class="remember-row">
+          <label class="check-label">
+            <div class="custom-check">✓</div>
+            Keep me signed in
+          </label>
+          <a class="forgot-link" href="#">Forgot password?</a>
+        </div>
+        <button class="btn btn-primary" style="width:100%;padding:13px;font-size:15px;" onclick="showApp()">
+          Sign in →
+        </button>
+        <div class="divider-text">or continue with</div>
+        <div class="social-row">
+          <button class="social-btn">🔵 Google</button>
+          <button class="social-btn">🪟 Microsoft</button>
+          <button class="social-btn">💬 Slack</button>
+        </div>
+      </div>
+      <div class="login-footer">© 2025 NexaMRP · Enterprise Manufacturing Suite</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ APP SHELL ═══ -->
+<div id="app-shell" class="app-shell" style="display:none;">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">N</div>
+      <div class="logo-text">Nexa<span>MRP</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">Main</div>
+      <div class="nav-item active" onclick="navigate('dashboard',this)">
+        <span class="nav-icon">📊</span> Production Dashboard
+      </div>
+      <div class="nav-item" onclick="navigate('reports',this)">
+        <span class="nav-icon">📋</span> Reports & Alerts
+        <span class="nav-badge">3</span>
+      </div>
+      <div class="nav-item" onclick="navigate('mrp',this)">
+        <span class="nav-icon">🔩</span> MRP Data Entry
+      </div>
+      <div class="nav-item" onclick="navigate('planning',this)">
+        <span class="nav-icon">📅</span> Production Planning
+      </div>
+      <div class="nav-item" onclick="navigate('inventory',this)">
+        <span class="nav-icon">📦</span> Inventory Management
+        <span class="nav-badge" style="background:rgba(217,119,6,0.7);">!</span>
+      </div>
+      <div class="nav-section">Administration</div>
+      <div class="nav-item" onclick="navigate('users',this)">
+        <span class="nav-icon">👥</span> User Management
+      </div>
+      <div class="nav-item" onclick="navigate('settings-notif',this)">
+        <span class="nav-icon">⚙️</span> Settings
+      </div>
+      <div class="nav-item" onclick="navigate('settings-company',this)">
+        <span class="nav-icon">🏢</span> Company Settings
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-avatar">JD</div>
+      <div>
+        <div class="user-name">John Doe</div>
+        <div class="user-role">Administrator</div>
+      </div>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:4px;font-size:10px;color:rgba(255,255,255,0.3);">
+        <div class="online-dot" style="background:var(--green);"></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main">
+
+    <!-- ═══ DASHBOARD ═══ -->
+    <div id="page-dashboard" class="page active">
+      <div class="topbar">
+        <div class="topbar-left">
+          <div class="topbar-title">Production Dashboard</div>
+          <div class="breadcrumb"><span>Today</span><span>·</span><span id="live-time">—</span></div>
+        </div>
+        <div class="topbar-actions">
+          <div class="topbar-notif"><span>🔔</span><div class="notif-dot"></div></div>
+          <button class="btn btn-ghost">📤 Export CSV</button>
+          <button class="btn btn-success">+ Add Order</button>
+          <button class="btn btn-primary">📊 Reports</button>
+        </div>
+      </div>
+      <div class="page-content">
+
+        <!-- KPI Grid -->
+        <div class="grid grid-4" style="margin-bottom:24px;">
+          <div class="metric-card stagger">
+            <div class="metric-icon" style="background:var(--accent-soft);">🏭</div>
+            <div class="metric-label">Today's Output</div>
+            <div class="metric-value">1,<span style="color:var(--accent);">250</span></div>
+            <div class="metric-footer">
+              <span class="badge badge-green">▲ 8.2%</span>
+              <span>vs yesterday</span>
+            </div>
+            <div class="progress-track"><div class="progress-fill" style="width:78%;background:linear-gradient(90deg,var(--accent),var(--accent2));"></div></div>
+          </div>
+
+          <div class="metric-card stagger">
+            <div class="metric-icon" style="background:var(--orange-soft);">⏱️</div>
+            <div class="metric-label">Active Delays</div>
+            <div class="metric-value">2.<span style="font-size:18px;color:var(--orange);">5h</span></div>
+            <div class="metric-footer">
+              <span class="badge badge-orange">3 delays</span>
+              <span>Line 3 halted</span>
+            </div>
+            <div class="progress-track"><div class="progress-fill" style="width:45%;background:linear-gradient(90deg,var(--orange),#fbbf24);"></div></div>
+          </div>
+
+          <div class="metric-card stagger">
+            <div class="metric-icon" style="background:var(--green-soft);">⚙️</div>
+            <div class="metric-label">Machine Utilization</div>
+            <div class="metric-value">85<span style="font-size:20px;color:var(--green);">%</span></div>
+            <div class="metric-footer">
+              <span class="badge badge-green">12 online</span>
+              <span>2 in maintenance</span>
+            </div>
+            <div class="progress-track"><div class="progress-fill" style="width:85%;background:linear-gradient(90deg,var(--green),#34d399);"></div></div>
+          </div>
+
+          <div class="metric-card stagger">
+            <div class="metric-icon" style="background:var(--purple-soft);">📦</div>
+            <div class="metric-label">Orders Completed</div>
+            <div class="metric-value">47</div>
+            <div class="metric-footer">
+              <span class="badge badge-purple">▲ 12%</span>
+              <span>this week</span>
+            </div>
+            <div class="progress-track"><div class="progress-fill" style="width:62%;background:linear-gradient(90deg,var(--purple),#a78bfa);"></div></div>
+          </div>
+        </div>
+
+        <!-- Production Live -->
+        <div class="card" style="margin-bottom:24px;">
+          <div class="card-header">
+            <div class="card-title"><div class="card-title-dot"></div>Production Pipeline — Live</div>
+            <div style="display:flex;gap:8px;align-items:center;">
+              <div class="live-badge"><div class="live-dot"></div> Running</div>
+              <button class="btn btn-ghost" style="padding:6px 12px;font-size:12px;">Refresh</button>
+            </div>
+          </div>
+          <div style="padding:16px 24px 24px;">
+            <div class="pipeline-wrap">
+              <div class="pipeline-step done"><div class="ps-dot done">✓</div><div class="ps-label">Pre-paint</div><div class="ps-time">Done</div></div>
+              <div class="pipeline-step done"><div class="ps-dot done">✓</div><div class="ps-label">Molding</div><div class="ps-time">Done</div></div>
+              <div class="pipeline-step done"><div class="ps-dot done">✓</div><div class="ps-label">Aging</div><div class="ps-time">Done</div></div>
+              <div class="pipeline-step done"><div class="ps-dot done">✓</div><div class="ps-label">Quality</div><div class="ps-time">Done</div></div>
+              <div class="pipeline-step active"><div class="ps-dot active">●</div><div class="ps-label">Assembly</div><div class="ps-time">2h left</div></div>
+              <div class="pipeline-step active"><div class="ps-dot delayed">!</div><div class="ps-label">Welding</div><div class="ps-time">Delayed</div></div>
+              <div class="pipeline-step active"><div class="ps-dot active">●</div><div class="ps-label">Finishing</div><div class="ps-time">Active</div></div>
+              <div class="pipeline-step pending"><div class="ps-dot pending">○</div><div class="ps-label">Testing</div><div class="ps-time">Queued</div></div>
+              <div class="pipeline-step pending"><div class="ps-dot pending">○</div><div class="ps-label">Dispatch</div><div class="ps-time">Queued</div></div>
+            </div>
+            <div style="display:flex;gap:24px;padding:12px 0 0;border-top:1px solid var(--border);margin-top:8px;">
+              <div>
+                <div style="font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Batch</div>
+                <div style="font-size:14px;font-weight:700;color:var(--text);">WO-2024-0089</div>
+              </div>
+              <div>
+                <div style="font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Product</div>
+                <div style="font-size:14px;font-weight:700;color:var(--text);">Product V50 Series</div>
+              </div>
+              <div>
+                <div style="font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Target Qty</div>
+                <div style="font-size:14px;font-weight:700;color:var(--text);">500 units</div>
+              </div>
+              <div>
+                <div style="font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Completion</div>
+                <div style="font-size:14px;font-weight:700;color:var(--green);">54%</div>
+              </div>
+              <div style="margin-left:auto;">
+                <span class="badge badge-orange">⚠ 1 Delay Active</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chart + Alerts -->
+        <div class="grid grid-2-1">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><div class="card-title-dot"></div>Output per Hour</div>
+              <div style="display:flex;gap:8px;">
+                <select><option>All Plants</option><option>Plant A</option><option>Plant B</option></select>
+                <select><option>Last 7 months</option><option>30 days</option></select>
+              </div>
+            </div>
+            <div class="area-chart-wrap" style="padding-top:20px;">
+              <svg viewBox="0 0 540 130" width="100%" style="display:block;">
+                <defs>
+                  <linearGradient id="g1" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0%" stop-color="#1a56db" stop-opacity=".15"/>
+                    <stop offset="100%" stop-color="#1a56db" stop-opacity="0"/>
+                  </linearGradient>
+                  <linearGradient id="g2" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0%" stop-color="#16a34a" stop-opacity=".1"/>
+                    <stop offset="100%" stop-color="#16a34a" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <!-- Grid lines -->
+                <line x1="0" y1="30" x2="540" y2="30" stroke="var(--border2)" stroke-width="1" stroke-dasharray="4"/>
+                <line x1="0" y1="65" x2="540" y2="65" stroke="var(--border2)" stroke-width="1" stroke-dasharray="4"/>
+                <line x1="0" y1="100" x2="540" y2="100" stroke="var(--border2)" stroke-width="1" stroke-dasharray="4"/>
+                <!-- Area 1 (Primary) -->
+                <path fill="url(#g1)" d="M0,105 L60,88 L120,82 L180,92 L240,65 L300,55 L360,70 L420,42 L480,32 L540,28 L540,130 L0,130 Z"/>
+                <polyline fill="none" stroke="#1a56db" stroke-width="2.5" stroke-linejoin="round" points="0,105 60,88 120,82 180,92 240,65 300,55 360,70 420,42 480,32 540,28"/>
+                <!-- Area 2 (Secondary) -->
+                <path fill="url(#g2)" d="M0,115 L60,105 L120,100 L180,108 L240,90 L300,82 L360,92 L420,70 L480,62 L540,55 L540,130 L0,130 Z"/>
+                <polyline fill="none" stroke="#16a34a" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="5,3" points="0,115 60,105 120,100 180,108 240,90 300,82 360,92 420,70 480,62 540,55"/>
+                <!-- Dots -->
+                <circle cx="300" cy="55" r="5" fill="#1a56db" stroke="#fff" stroke-width="2"/>
+                <circle cx="480" cy="32" r="5" fill="#1a56db" stroke="#fff" stroke-width="2"/>
+                <circle cx="540" cy="28" r="5" fill="#16a34a" stroke="#fff" stroke-width="2"/>
+                <!-- Tooltip -->
+                <rect x="275" y="32" width="50" height="20" rx="6" fill="var(--text)"/>
+                <text x="300" y="46" fill="#fff" font-size="10" font-family="Outfit" text-anchor="middle" font-weight="600">1,284</text>
+              </svg>
+              <div class="chart-legend">
+                <div class="legend-item"><div class="legend-dot" style="background:var(--accent);"></div>Actual Output</div>
+                <div class="legend-item"><div class="legend-dot" style="background:var(--green);border:1px dashed var(--green);border-radius:50%;"></div>Target</div>
+                <span style="margin-left:auto;font-size:11px;color:var(--text3);">Jan — Jul 2024</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><div class="card-title-dot" style="background:var(--red);"></div>Alerts</div>
+              <span class="badge badge-red">3 active</span>
+            </div>
+            <div style="padding:14px 16px;">
+              <div class="alert-item danger">
+                <div class="alert-icon-box" style="background:var(--red-soft);">🔴</div>
+                <div class="alert-text">
+                  <strong>Material Shortage</strong>
+                  <span>Steel supply critically low — Line 3 at risk. Reorder immediately.</span>
+                </div>
+              </div>
+              <div class="alert-item warning">
+                <div class="alert-icon-box" style="background:var(--orange-soft);">⚠️</div>
+                <div class="alert-text">
+                  <strong>Machine Malfunction</strong>
+                  <span>Welder W15 overheating — production line 3 halted. Maintenance dispatched.</span>
+                </div>
+              </div>
+              <div class="alert-item info">
+                <div class="alert-icon-box" style="background:var(--accent-soft);">ℹ️</div>
+                <div class="alert-text">
+                  <strong>Schedule Update</strong>
+                  <span>Shift B extended by 2 hours to cover delayed batch WO-2024-0089.</span>
+                </div>
+              </div>
+              <div class="alert-item success">
+                <div class="alert-icon-box" style="background:var(--green-soft);">✅</div>
+                <div class="alert-text">
+                  <strong>Batch Completed</strong>
+                  <span>WO-2024-0081 dispatched successfully. 500/500 units.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ REPORTS ═══ -->
+    <div id="page-reports" class="page">
+      <div class="topbar">
+        <div class="topbar-left">
+          <div class="topbar-title">Reports & Alerts</div>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn btn-ghost">📤 Export CSV</button>
+          <button class="btn btn-primary">📊 Monthly Report</button>
+        </div>
+      </div>
+      <div class="page-content">
+
+        <div class="card" style="margin-bottom:20px;">
+          <div style="padding:14px 22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+            <div class="tabs">
+              <div class="tab active">Latest Reports</div>
+              <div class="tab">Alert History</div>
+            </div>
+            <div style="margin-left:auto;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+              <div class="search-wrap"><input class="input no-icon" style="width:190px;padding-left:38px;" placeholder="Search reports..."></div>
+              <select><option>All Categories</option><option>Production</option><option>Inventory</option><option>Machines</option></select>
+              <select><option>Sort by Date</option><option>By Product</option><option>By Status</option></select>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:20px;">
+          <div class="card-header">
+            <div class="card-title"><div class="card-title-dot"></div>Production Reports</div>
+            <span class="badge badge-gray">8 records</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th><th>Work Order</th><th>Product</th><th>Qty Produced</th><th>Efficiency</th><th>Delays</th><th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="color:var(--text);font-weight:500;">Apr 20, 2024</td>
+                  <td><span class="badge badge-gray">WO-0081</span></td>
+                  <td>Product A — Series V</td>
+                  <td style="font-weight:600;color:var(--text);">1,200 units</td>
+                  <td><span class="badge badge-green">94.2%</span></td>
+                  <td>0.5h</td>
+                  <td><span class="badge badge-green">Completed</span></td>
+                </tr>
+                <tr>
+                  <td style="color:var(--text);font-weight:500;">Apr 22, 2024</td>
+                  <td><span class="badge badge-gray">WO-0082</span></td>
+                  <td>Product B — QB Team</td>
+                  <td style="font-weight:600;color:var(--text);">2,000 units</td>
+                  <td><span class="badge badge-orange">78.1%</span></td>
+                  <td>2.5h</td>
+                  <td><span class="badge badge-orange">In Progress</span></td>
+                </tr>
+                <tr>
+                  <td style="color:var(--text);font-weight:500;">Apr 25, 2024</td>
+                  <td><span class="badge badge-gray">WO-0083</span></td>
+                  <td>Product C — Industrial</td>
+                  <td style="font-weight:600;color:var(--text);">1,000 units</td>
+                  <td><span class="badge badge-red">61.4%</span></td>
+                  <td>4.0h</td>
+                  <td><span class="badge badge-red">Delayed</span></td>
+                </tr>
+                <tr>
+                  <td style="color:var(--text);font-weight:500;">Apr 28, 2024</td>
+                  <td><span class="badge badge-gray">WO-0084</span></td>
+                  <td>Product A — Series V</td>
+                  <td style="font-weight:600;color:var(--text);">750 units</td>
+                  <td><span class="badge badge-green">97.0%</span></td>
+                  <td>0h</td>
+                  <td><span class="badge badge-green">Completed</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="grid grid-2">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><div class="card-title-dot" style="background:var(--orange);"></div>Storage Alerts</div>
+              <span class="badge badge-orange">2 warnings</span>
+            </div>
+            <div style="padding:14px 16px;">
+              <div class="alert-item warning">
+                <div class="alert-icon-box" style="background:var(--orange-soft);">🏭</div>
+                <div class="alert-text">
+                  <strong>Warehouse Zone B Overload</strong>
+                  <span>Capacity at 94% — threshold exceeded. Reroute incoming to Zone D.</span>
+                </div>
+              </div>
+              <div class="alert-item warning">
+                <div class="alert-icon-box" style="background:var(--orange-soft);">📦</div>
+                <div class="alert-text">
+                  <strong>Cold Storage Temperature</strong>
+                  <span>Unit CS-03 temperature drifting — inspect cooling system.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><div class="card-title-dot" style="background:var(--red);"></div>Daily Critical Alerts</div>
+              <span class="badge badge-red">1 critical</span>
+            </div>
+            <div style="padding:14px 16px;">
+              <div class="alert-item danger">
+                <div class="alert-icon-box" style="background:var(--red-soft);">⚡</div>
+                <div class="alert-text">
+                  <strong>Power Fluctuation — Plant 2</strong>
+                  <span>Voltage irregularities detected on production line 2. UPS engaged.</span>
+                </div>
+                <span class="badge badge-red" style="flex-shrink:0;align-self:flex-start;">CRITICAL</span>
+              </div>
+              <div class="alert-item info">
+                <div class="alert-icon-box" style="background:var(--accent-soft);">📊</div>
+                <div class="alert-text">
+                  <strong>Shift Changeover</strong>
+                  <span>Shift A → Shift B at 18:00. Handover notes logged.</span>
+                </div>
+                <span class="badge badge-blue" style="flex-shrink:0;align-self:flex-start;">INFO</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ MRP DATA ENTRY ═══ -->
+    <div id="page-mrp" class="page">
+      <div class="topbar">
+        <div class="topbar-left">
+          <div class="topbar-title">MRP Data Entry</div>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn btn-ghost">👥 Routing</button>
+          <button class="btn btn-ghost">⚙️ Settings</button>
+          <button class="btn btn-primary">+ Add Component</button>
+        </div>
+      </div>
+      <div class="page-content">
+        <div class="card">
+          <div style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:3px;">Product</div>
+              <div style="font-size:16px;font-weight:700;color:var(--text);">Product V50 — QB Team Series</div>
+            </div>
+            <div style="margin-left:auto;display:flex;gap:8px;">
+              <span class="badge badge-green">BOM Active</span>
+              <span class="badge badge-blue">Rev 3.2</span>
+            </div>
+          </div>
+
+          <div style="padding:24px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+              <div style="font-size:15px;font-weight:700;color:var(--text);">Bill of Materials</div>
+              <button class="btn btn-ghost" style="font-size:12px;">🔍 Select Component</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Part Name</th><th>Qty Required</th><th>Stock on Hand</th><th>Reorder Level</th><th>Lead Time</th><th>Unit Cost</th><th>Status</th><th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="td-name"><div class="status-dot dot-green"></div>M6 Screws (50mm)</td>
+                    <td>200 units</td>
+                    <td style="font-weight:600;color:var(--text);">1,240 units</td>
+                    <td>350 units</td>
+                    <td>3 days</td>
+                    <td>$0.12 / unit</td>
+                    <td><span class="badge badge-green">In Stock</span></td>
+                    <td><button class="btn btn-ghost" style="padding:4px 10px;font-size:11.5px;">Edit</button></td>
+                  </tr>
+                  <tr>
+                    <td class="td-name"><div class="status-dot dot-orange"></div>Male Connector C4</td>
+                    <td>300 units</td>
+                    <td style="font-weight:600;color:var(--orange);">280 units</td>
+                    <td>550 units</td>
+                    <td>7 days</td>
+                    <td>$1.40 / unit</td>
+                    <td><span class="badge badge-orange">Low Stock</span></td>
+                    <td><button class="btn btn-ghost" style="padding:4px 10px;font-size:11.5px;">Edit</button></td>
+                  </tr>
+                  <tr>
+                    <td class="td-name"><div class="status-dot dot-blue"></div>Aluminium Base Plate</td>
+                    <td>300 units</td>
+                    <td style="font-weight:600;color:var(--text);">640 units</td>
+                    <td>560 units</td>
+                    <td>14 days</td>
+                    <td>$8.90 / unit</td>
+                    <td><span class="badge badge-blue">Sufficient</span></td>
+                    <td><button class="btn btn-ghost" style="padding:4px 10px;font-size:11.5px;">Edit</button></td>
+                  </tr>
+                  <tr>
+                    <td class="td-name"><div class="status-dot dot-red"></div>Copper Wire (2mm)</td>
+                    <td>150 m</td>
+                    <td style="font-weight:600;color:var(--red);">40 m</td>
+                    <td>300 m</td>
+                    <td>5 days</td>
+                    <td>$2.20 / m</td>
+                    <td><span class="badge badge-red">Reorder Now</span></td>
+                    <td><button class="btn btn-ghost" style="padding:4px 10px;font-size:11.5px;">Edit</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-top:18px;padding-top:16px;border-top:1px solid var(--border);">
+              <div style="font-size:13px;color:var(--text2);">
+                ✓ Auto-calculated reorder quantity: <strong style="color:var(--text);">500 units</strong> &nbsp;·&nbsp;
+                <span style="color:var(--orange);">⚠ 2 components require attention</span>
+              </div>
+              <div style="display:flex;gap:8px;">
+                <button class="btn btn-ghost">Discard</button>
+                <button class="btn btn-primary">Save BOM</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PRODUCTION PLANNING ═══ -->
+    <div id="page-planning" class="page">
+      <div class="topbar">
+        <div class="topbar-left"><div class="topbar-title">Production Planning</div></div>
+        <div class="topbar-actions">
+          <button class="btn btn-ghost">📋 Templates</button>
+          <button class="btn btn-primary">📤 Export Plan</button>
+        </div>
+      </div>
+      <div class="page-content">
+        <div class="grid grid-2">
+          <!-- Form -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><div class="card-title-dot"></div>New Production Order</div>
+            </div>
+            <div style="padding:22px;">
+              <div style="margin-bottom:18px;">
+                <div class="tabs">
+                  <div class="tab active">Details</div>
+                  <div class="tab">Resources</div>
+                  <div class="tab">Schedule</div>
+                </div>
+              </div>
+              <div style="display:grid;gap:14px;">
+                <div class="grid grid-2" style="gap:12px;">
+                  <div class="form-group">
+                    <div class="form-label">Product Name</div>
+                    <input class="input no-icon" value="Product V50" readonly>
+                  </div>
+                  <div class="form-group">
+                    <div class="form-label">Work Order Type</div>
+                    <select class="input no-icon"><option>Manufacturing</option><option>Rework</option><option>Assembly</option></select>
+                  </div>
+                </div>
+                <div class="grid grid-2" style="gap:12px;">
+                  <div class="form-group">
+                    <div class="form-label">Target Quantity</div>
+                    <input class="input no-icon" placeholder="e.g. 500 units">
+                  </div>
+                  <div class="form-group">
+                    <div class="form-label">Priority</div>
+                    <select class="input no-icon"><option>Normal</option><option>High</option><option>Critical</option></select>
+                  </div>
+                </div>
+                <div class="grid grid-2" style="gap:12px;">
+                  <div class="form-group">
+                    <div class="form-label">Start Date</div>
+                    <input class="input no-icon" type="date" value="2024-05-01">
+                  </div>
+                  <div class="form-group">
+                    <div class="form-label">Due Date</div>
+                    <input class="input no-icon" type="date" value="2024-05-14">
+                  </div>
+                </div>
+                <div class="grid grid-2" style="gap:12px;">
+                  <div class="form-group">
+                    <div class="form-label">Production Line</div>
+                    <select class="input no-icon"><option>Line A — Plant 1</option><option>Line B — Plant 1</option><option>Line C — Plant 2</option></select>
+                  </div>
+                  <div class="form-group">
+                    <div class="form-label">Shift</div>
+                    <select class="input no-icon"><option>Shift 1 (06:00–14:00)</option><option>Shift 2 (14:00–22:00)</option><option>Night (22:00–06:00)</option></select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="form-label">Notes</div>
+                  <textarea class="input no-icon" style="height:72px;resize:vertical;line-height:1.5;" placeholder="Any special instructions..."></textarea>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--accent-soft);border-radius:var(--radius-sm);border:1px solid rgba(26,86,219,0.12);">
+                  <span>ℹ️</span>
+                  <span style="font-size:12.5px;color:var(--accent);">Auto-calculated reorder quantity: <strong>500 units</strong></span>
+                </div>
+                <div style="display:flex;gap:8px;justify-content:flex-end;">
+                  <button class="btn btn-ghost">Save Draft</button>
+                  <button class="btn btn-primary">🗓️ Schedule Order</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chart + Capacity -->
+          <div style="display:flex;flex-direction:column;gap:18px;">
+            <div class="card" style="flex:1;">
+              <div class="card-header">
+                <div class="card-title"><div class="card-title-dot"></div>Daily Production Volume</div>
+                <select><option>May 2024</option><option>Apr 2024</option></select>
+              </div>
+              <div style="padding:16px 22px 22px;">
+                <div class="bar-chart-wrap">
+                  <div class="bar-col"><div class="bar-val">980</div><div class="bar" style="height:54%;background:var(--accent);opacity:0.9;"></div><div class="bar-label">01</div></div>
+                  <div class="bar-col"><div class="bar-val">720</div><div class="bar" style="height:40%;background:var(--accent2);opacity:0.9;"></div><div class="bar-label">03</div></div>
+                  <div class="bar-col"><div class="bar-val">1580</div><div class="bar" style="height:87%;background:var(--green);"></div><div class="bar-label">05</div></div>
+                  <div class="bar-col"><div class="bar-val">1240</div><div class="bar" style="height:68%;background:var(--orange);"></div><div class="bar-label">07</div></div>
+                  <div class="bar-col"><div class="bar-val">960</div><div class="bar" style="height:53%;background:var(--purple);"></div><div class="bar-label">09</div></div>
+                  <div class="bar-col"><div class="bar-val">1680</div><div class="bar" style="height:93%;background:var(--accent);"></div><div class="bar-label">11</div></div>
+                  <div class="bar-col"><div class="bar-val">820</div><div class="bar" style="height:45%;background:var(--red);"></div><div class="bar-label">13</div></div>
+                </div>
+                <div style="font-size:11px;color:var(--text3);margin-top:10px;text-align:center;">Units produced per day</div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title"><div class="card-title-dot" style="background:var(--green);"></div>Capacity Overview</div>
+              </div>
+              <div style="padding:18px 22px;">
+                <div style="display:flex;gap:24px;align-items:center;">
+                  <div class="ring-wrap">
+                    <svg width="80" height="80" viewBox="0 0 80 80">
+                      <circle class="ring-bg" cx="40" cy="40" r="34"/>
+                      <circle class="ring-val" cx="40" cy="40" r="34" stroke="#1a56db"
+                        stroke-dasharray="213.6" stroke-dashoffset="53.4"/>
+                    </svg>
+                    <div class="ring-text">
+                      <div class="ring-num">75%</div>
+                      <div class="ring-lbl">Capacity</div>
+                    </div>
+                  </div>
+                  <div style="flex:1;display:flex;flex-direction:column;gap:10px;">
+                    <div>
+                      <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+                        <span style="font-size:12px;color:var(--text2);">Line A</span>
+                        <span style="font-size:12px;font-weight:600;color:var(--text);">88%</span>
+                      </div>
+                      <div class="progress-track"><div class="progress-fill" style="width:88%;background:var(--green);"></div></div>
+                    </div>
+                    <div>
+                      <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+                        <span style="font-size:12px;color:var(--text2);">Line B</span>
+                        <span style="font-size:12px;font-weight:600;color:var(--orange);">62%</span>
+                      </div>
+                      <div class="progress-track"><div class="progress-fill" style="width:62%;background:var(--orange);"></div></div>
+                    </div>
+                    <div>
+                      <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+                        <span style="font-size:12px;color:var(--text2);">Line C</span>
+                        <span style="font-size:12px;font-weight:600;color:var(--text);">74%</span>
+                      </div>
+                      <div class="progress-track"><div class="progress-fill" style="width:74%;background:var(--accent);"></div></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ INVENTORY ═══ -->
+    <div id="page-inventory" class="page">
+      <div class="topbar">
+        <div class="topbar-left"><div class="topbar-title">Inventory Management</div></div>
+        <div class="topbar-actions">
+          <button class="btn btn-ghost">📤 Export CSV</button>
+          <button class="btn btn-primary">+ Add Item</button>
+        </div>
+      </div>
+      <div class="page-content">
+
+        <div class="grid grid-4" style="margin-bottom:24px;">
+          <div class="metric-card stagger">
+            <div class="metric-icon" style="background:var(--green-soft);">📦</div>
+            <div class="metric-label">Total SKUs</div>
+            <div class="metric-value" style="font-size:30px;">248</div>
+            <span class="badge badge-green">All tracked</span>
+          </div>
+          <div class="metric-card stagger">
+            <div class="metric-icon" style="background:var(--orange-soft);">⚠️</div>
+            <div class="metric-label">Low Stock</div>
+            <div class="metric-value" style="font-size:30px;color:var(--orange);">14</div>
+            <span class="badge badge-orange">Reorder needed</span>
+          </div>
+          <div class="metric-card stagger">
+            <div class="metric-icon" style="background:var(--red-soft);">🔴</div>
+            <div class="metric-label">Out of Stock</div>
+            <div class="metric-value" style="font-size:30px;color:var(--red);">3</div>
+            <span class="badge badge-red">Critical</span>
+          </div>
+          <div class="metric-card stagger">
+            <div class="metric-icon" style="background:var(--accent-soft);">💰</div>
+            <div class="metric-label">Total Value</div>
+            <div class="metric-value" style="font-size:26px;">$2.4M</div>
+            <span class="badge badge-blue">+3.1% MoM</span>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:20px;">
+          <div style="padding:14px 22px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+            <div class="search-wrap" style="flex:1;min-width:200px;">
+              <input class="input" style="padding-left:38px;" placeholder="Search materials, SKUs...">
+            </div>
+            <select><option>All Categories</option><option>Raw Materials</option><option>Components</option><option>Finished Goods</option></select>
+            <select><option>All Statuses</option><option>In Stock</option><option>Low Stock</option><option>Out of Stock</option></select>
+            <div class="tabs">
+              <div class="tab active">Table</div>
+              <div class="tab">Cards</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Material Name</th><th>SKU</th><th>Category</th><th>Stock</th><th>Min Level</th><th>Reorder Qty</th><th>Unit Cost</th><th>Status</th><th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="td-name"><div class="status-dot dot-green"></div>Cadmium Steel Rod</td>
+                  <td style="font-size:12px;color:var(--text3);">SKU-0041</td>
+                  <td><span class="badge badge-gray">Raw Material</span></td>
+                  <td style="font-weight:600;color:var(--text);">820 units</td>
+                  <td>100 units</td>
+                  <td>500 units</td>
+                  <td>$4.20</td>
+                  <td><span class="badge badge-green">In Stock</span></td>
+                  <td><button class="btn btn-ghost" style="padding:4px 10px;font-size:11.5px;">Manage</button></td>
+                </tr>
+                <tr>
+                  <td class="td-name"><div class="status-dot dot-orange"></div>Bearing Assembly C1B</td>
+                  <td style="font-size:12px;color:var(--text3);">SKU-0082</td>
+                  <td><span class="badge badge-purple">Component</span></td>
+                  <td style="font-weight:600;color:var(--orange);">48 units</td>
+                  <td>150 units</td>
+                  <td>300 units</td>
+                  <td>$12.80</td>
+                  <td><span class="badge badge-orange">Low Stock</span></td>
+                  <td><button class="btn btn-ghost" style="padding:4px 10px;font-size:11.5px;">Reorder</button></td>
+                </tr>
+                <tr>
+                  <td class="td-name"><div class="status-dot dot-green"></div>Polypropylene Sheet</td>
+                  <td style="font-size:12px;color:var(--text3);">SKU-0117</td>
+                  <td><span class="badge badge-gray">Raw Material</span></td>
+                  <td style="font-weight:600;color:var(--text);">1,200 units</td>
+                  <td>200 units</td>
+                  <td>600 units</td>
+                  <td>$1.60</td>
+                  <td><span class="badge badge-green">In Stock</span></td>
+                  <td><button class="btn btn-ghost" style="padding:4px 10px;font-size:11.5px;">Manage</button></td>
+                </tr>
+                <tr>
+                  <td class="td-name"><div class="status-dot dot-red"></div>Hydraulic Seal Kit</td>
+                  <td style="font-size:12px;color:var(--text3);">SKU-0203</td>
+                  <td><span class="badge badge-purple">Component</span></td>
+                  <td style="font-weight:600;color:var(--red);">0 units</td>
+                  <td>50 units</td>
+                  <td>200 units</td>
+                  <td>$34.00</td>
+                  <td><span class="badge badge-red">Out of Stock</span></td>
+                  <td><button class="btn btn-danger" style="padding:4px 10px;font-size:11.5px;">Urgent Order</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ USERS ═══ -->
+    <div id="page-users" class="page">
+      <div class="topbar">
+        <div class="topbar-left"><div class="topbar-title">User Management</div></div>
+        <div class="topbar-actions">
+          <button class="btn btn-primary">+ Invite User</button>
+          <select><option>All Roles</option><option>Admin</option><option>Manager</option><option>Operator</option></select>
+        </div>
+      </div>
+      <div class="page-content">
+
+        <div class="grid grid-4" style="margin-bottom:24px;">
+          <div class="metric-card stagger"><div class="metric-icon" style="background:var(--accent-soft);">👥</div><div class="metric-label">Total Users</div><div class="metric-value" style="font-size:30px;">24</div><span class="badge badge-blue">Active</span></div>
+          <div class="metric-card stagger"><div class="metric-icon" style="background:var(--green-soft);">🟢</div><div class="metric-label">Online Now</div><div class="metric-value" style="font-size:30px;color:var(--green);">8</div><span class="badge badge-green">Live</span></div>
+          <div class="metric-card stagger"><div class="metric-icon" style="background:var(--purple-soft);">🔑</div><div class="metric-label">Admins</div><div class="metric-value" style="font-size:30px;">3</div><span class="badge badge-purple">Privileged</span></div>
+          <div class="metric-card stagger"><div class="metric-icon" style="background:var(--orange-soft);">⏳</div><div class="metric-label">Pending Invites</div><div class="metric-value" style="font-size:30px;color:var(--orange);">2</div><span class="badge badge-orange">Awaiting</span></div>
+        </div>
+
+        <div class="card" style="margin-bottom:20px;">
+          <div style="padding:14px 22px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
+            <div class="search-wrap">
+              <input class="input" style="width:220px;padding-left:38px;" placeholder="Search users...">
+            </div>
+            <select><option>All Roles</option><option>Administrator</option><option>Manager</option><option>Operator</option></select>
+            <select><option>All Departments</option><option>Production</option><option>Quality</option><option>Logistics</option></select>
+            <span style="margin-left:auto;font-size:12px;color:var(--text3);">24 users total</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>User</th><th>Email</th><th>Role</th><th>Department</th><th>Last Active</th><th>Status</th><th>Actions</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div style="display:flex;align-items:center;gap:10px;">
+                      <div class="user-avi" style="background:linear-gradient(135deg,#1a56db,#0891b2);">JD</div>
+                      <div><div style="font-weight:600;color:var(--text);font-size:13.5px;">John Doe</div><div style="font-size:11px;color:var(--text3);">@johndoe</div></div>
+                    </div>
+                  </td>
+                  <td style="font-size:12.5px;">john.doe@nexamrp.com</td>
+                  <td><span class="badge badge-purple">Administrator</span></td>
+                  <td>Operations</td>
+                  <td style="font-size:12px;color:var(--text3);">Just now</td>
+                  <td><span class="badge badge-green">● Online</span></td>
+                  <td><button class="btn btn-ghost" style="padding:4px 10px;font-size:11.5px;">Edit</button></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div style="display:flex;align-items:center;gap:10px;">
+                      <div class="user-avi" style="background:linear-gradient(135deg,#16a34a,#34d399);">NB</div>
+                      <div><div style="font-weight:600;color:var(--text);font-size:13.5px;">Nina Barnes</div><div style="font-size:11px;color:var(--text3);">@nbarnes</div></div>
+                    </div>
+                  </td>
+                  <td style="font-size:12.5px;">nina.b@nexamrp.com</td>
+                  <td><span class="badge badge-blue">Manager</span></td>
+                  <td>Production</td>
+                  <td style="font-size:12px;color:var(--text3);">12 min ago</td>
+                  <td><span class="badge badge-green">● Online</span></td>
+                  <td><button class="btn btn-ghost" style="padding:4px 10px;font-size:11.5px;">Edit</button></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div style="display:flex;align-items:center;gap:10px;">
+                      <div class="user-avi" style="background:linear-gradient(135deg,#d97706,#fbbf24);">NC</div>
+                      <div><div style="font-weight:600;color:var(--text);font-size:13.5px;">Nathan Cole</div><div style="font-size:11px;color:var(--text3);">@ncole</div></div>
+                    </div>
+                  </td>
+                  <td style="font-size:12.5px;">n.cole@nexamrp.com</td>
+                  <td><span class="badge badge-gray">Operator</span></td>
+                  <td>Quality Control</td>
+                  <td style="font-size:12px;color:var(--text3);">1 hr ago</td>
+                  <td><span class="badge badge-gray">○ Away</span></td>
+                  <td><button class="btn btn-ghost" style="padding:4px 10px;font-size:11.5px;">Edit</button></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div style="display:flex;align-items:center;gap:10px;">
+                      <div class="user-avi" style="background:linear-gradient(135deg,#7c3aed,#a78bfa);">DM</div>
+                      <div><div style="font-weight:600;color:var(--text);font-size:13.5px;">Diana Mills</div><div style="font-size:11px;color:var(--text3);">@dmills</div></div>
+                    </div>
+                  </td>
+                  <td style="font-size:12.5px;">diana.m@nexamrp.com</td>
+                  <td><span class="badge badge-blue">Manager</span></td>
+                  <td>Logistics</td>
+                  <td style="font-size:12px;color:var(--text3);">3 hr ago</td>
+                  <td><span class="badge badge-gray">○ Offline</span></td>
+                  <td><button class="btn btn-ghost" style="padding:4px 10px;font-size:11.5px;">Edit</button></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div style="display:flex;align-items:center;gap:10px;">
+                      <div class="user-avi" style="background:linear-gradient(135deg,#dc2626,#f87171);">SV</div>
+                      <div><div style="font-weight:600;color:var(--text);font-size:13.5px;">Sam Voss</div><div style="font-size:11px;color:var(--text3);">@svoss</div></div>
+                    </div>
+                  </td>
+                  <td style="font-size:12.5px;">s.voss@nexamrp.com</td>
+                  <td><span class="badge badge-gray">Operator</span></td>
+                  <td>Production</td>
+                  <td style="font-size:12px;color:var(--text3);">Yesterday</td>
+                  <td><span class="badge badge-orange">⏸ Suspended</span></td>
+                  <td><button class="btn btn-ghost" style="padding:4px 10px;font-size:11.5px;">Review</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ SETTINGS NOTIFICATIONS ═══ -->
+    <div id="page-settings-notif" class="page">
+      <div class="topbar">
+        <div class="topbar-left"><div class="topbar-title">Settings</div></div>
+        <div class="topbar-actions">
+          <button class="btn btn-ghost">🔗 Support</button>
+          <button class="btn btn-primary">💾 Save Changes</button>
+        </div>
+      </div>
+      <div class="page-content">
+        <div class="grid grid-1-2" style="gap:22px;">
+          <!-- Left nav -->
+          <div>
+            <div class="card" style="padding:16px;">
+              <div style="font-size:10.5px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:10px;padding:0 6px;">Navigation</div>
+              <div class="settings-nav">
+                <div class="settings-nav-item"><span>👤</span> Profile</div>
+                <div class="settings-nav-item active"><span>🔔</span> Notifications</div>
+                <div class="settings-nav-item"><span>🔐</span> Security</div>
+                <div class="settings-nav-item"><span>📁</span> Integrations</div>
+                <div class="settings-nav-item"><span>🏢</span> Team</div>
+                <div class="settings-nav-item"><span>💳</span> Billing</div>
+                <div class="settings-nav-item"><span>🌐</span> Language & Region</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><div class="card-title-dot"></div>Notification Preferences</div>
+            </div>
+            <div style="padding:22px;">
+              <div style="font-size:12px;color:var(--text3);margin-bottom:18px;">Control which alerts and updates you receive. Changes take effect immediately.</div>
+
+              <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.7px;margin-bottom:12px;">Production</div>
+              <div class="notif-row">
+                <div>
+                  <div class="notif-label">🏭 Production Alerts</div>
+                  <div class="notif-sub">Line stoppages, capacity warnings, batch completions</div>
+                </div>
+                <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+              </div>
+              <div class="notif-row">
+                <div>
+                  <div class="notif-label">⏱️ Delay Notifications</div>
+                  <div class="notif-sub">Alerts when production falls behind schedule</div>
+                </div>
+                <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+              </div>
+
+              <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.7px;margin:20px 0 12px;">Inventory</div>
+              <div class="notif-row">
+                <div>
+                  <div class="notif-label">📦 Inventory Alerts</div>
+                  <div class="notif-sub">Low stock warnings and reorder reminders</div>
+                </div>
+                <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+              </div>
+              <div class="notif-row">
+                <div>
+                  <div class="notif-label">🔴 Out-of-Stock Alerts</div>
+                  <div class="notif-sub">Immediate alerts when stock hits zero</div>
+                </div>
+                <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+              </div>
+
+              <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.7px;margin:20px 0 12px;">Delivery</div>
+              <div class="form-group">
+                <div class="form-label">Alerts Email Address</div>
+                <div style="display:flex;gap:10px;">
+                  <input class="input no-icon" value="alerts@company.com" style="flex:1;">
+                  <button class="btn btn-ghost">Verify</button>
+                </div>
+              </div>
+              <div style="margin-top:12px;display:flex;gap:10px;">
+                <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text2);cursor:pointer;">
+                  <div style="width:14px;height:14px;border-radius:3px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:9px;color:#fff;">✓</div>
+                  Email
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text2);cursor:pointer;">
+                  <div style="width:14px;height:14px;border-radius:3px;border:1.5px solid var(--border2);"></div>
+                  SMS
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text2);cursor:pointer;">
+                  <div style="width:14px;height:14px;border-radius:3px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:9px;color:#fff;">✓</div>
+                  In-app
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SETTINGS COMPANY ═══ -->
+    <div id="page-settings-company" class="page">
+      <div class="topbar">
+        <div class="topbar-left"><div class="topbar-title">Company Settings</div></div>
+        <div class="topbar-actions">
+          <button class="btn btn-ghost">Discard Changes</button>
+          <button class="btn btn-primary">💾 Save</button>
+        </div>
+      </div>
+      <div class="page-content">
+        <div class="grid grid-1-2" style="gap:22px;">
+          <div>
+            <div class="card" style="padding:16px;">
+              <div class="settings-nav">
+                <div class="settings-nav-item"><span>⚙️</span> General</div>
+                <div class="settings-nav-item active"><span>🏢</span> Company Profile</div>
+                <div class="settings-nav-item"><span>📁</span> Departments</div>
+                <div class="settings-nav-item"><span>🔐</span> Security Policy</div>
+                <div class="settings-nav-item"><span>🌐</span> Language</div>
+                <div class="settings-nav-item"><span>📦</span> Inventory Rules</div>
+                <div class="settings-nav-item"><span>🔗</span> Integrations</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title"><div class="card-title-dot"></div>Company Profile</div>
+            </div>
+            <div style="padding:22px;display:flex;flex-direction:column;gap:16px;">
+              <div class="grid grid-2" style="gap:12px;">
+                <div class="form-group">
+                  <div class="form-label">Company Name</div>
+                  <input class="input no-icon" value="Acme Manufacturing Co.">
+                </div>
+                <div class="form-group">
+                  <div class="form-label">Industry</div>
+                  <select class="input no-icon"><option>Automotive</option><option>Electronics</option><option>FMCG</option></select>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="form-label">Headquarters Address</div>
+                <input class="input no-icon" value="42 Industrial Blvd, Manufacturing District">
+              </div>
+              <div class="grid grid-2" style="gap:12px;">
+                <div class="form-group">
+                  <div class="form-label">Timezone</div>
+                  <select class="input no-icon"><option>UTC+5:30 India</option><option>UTC+0:00 London</option></select>
+                </div>
+                <div class="form-group">
+                  <div class="form-label">Currency</div>
+                  <select class="input no-icon"><option>USD — US Dollar</option><option>INR — Indian Rupee</option><option>EUR — Euro</option></select>
+                </div>
+              </div>
+
+              <div style="border-top:1px solid var(--border);padding-top:18px;">
+                <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:14px;">Module Settings</div>
+                <div class="notif-row">
+                  <div><div class="notif-label">🟢 Auto Reorder</div><div class="notif-sub">Automatically trigger POs when stock hits reorder level</div></div>
+                  <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+                </div>
+                <div class="notif-row">
+                  <div><div class="notif-label">📊 Production Analytics</div><div class="notif-sub">Advanced OEE, downtime, and yield analytics</div></div>
+                  <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+                </div>
+                <div class="notif-row">
+                  <div><div class="notif-label">🔺 Predictive Maintenance</div><div class="notif-sub">AI-powered machine fault prediction (Beta)</div></div>
+                  <div class="toggle" onclick="this.classList.toggle('on')"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /app-shell -->
+
+<script>
+// Show app
+function showApp() {
+  document.getElementById('page-login').style.display = 'none';
+  document.getElementById('app-shell').style.display = 'flex';
+}
+
+// Navigation
+function navigate(id, el) {
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('#app-shell .page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+}
+
+// Live clock
+function tick() {
+  const el = document.getElementById('live-time');
+  if (el) {
+    const now = new Date();
+    el.textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  }
+  requestAnimationFrame(tick);
+}
+tick();
+
+// Animate stagger on navigate
+function animateStagger() {
+  document.querySelectorAll('.stagger').forEach((el, i) => {
+    el.style.animation = 'none';
+    el.offsetHeight;
+    el.style.animation = `fadeUp 0.5s ease ${i * 0.07}s both`;
+  });
+}
+
+// Progress bars
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    document.querySelectorAll('.progress-fill').forEach(bar => {
+      const w = bar.style.width;
+      bar.style.width = '0';
+      requestAnimationFrame(() => { bar.style.width = w; });
+    });
+  }, 400);
+});
+</script>
+</body>
+</html>
